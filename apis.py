@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
-import os
-from face2 import detect_faces_and_crop
+import cv2
+import numpy as np
+import base64
+from flask_cors import CORS  # Import CORS from flask_cors module
 from sigDetect2 import detect_and_crop_signature
 
 app = Flask(__name__)
+CORS(app)  # Apply CORS to your Flask app
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
 
 # Cropped Face API
 @app.route('/process_image', methods=['GET'])
@@ -25,19 +25,24 @@ def process_image():
         return jsonify({"error": "Failed"}), 500
     
 
-# Cropped Signaure API
-@app.route('/process_sig', methods=['GET'])
-def process_sig():
-    image_path = request.args.get('image_path')
-    if not image_path:
-        return jsonify({"error": "No image path provided"}), 400
+# Crop signature
+@app.route('/process_sign', methods=['POST'])
+def process_sign():
+    if 'image' not in request.files:
+        return jsonify({"error": "No image provided in the request"}), 400
+
+    image_file = request.files['image']
+    if image_file.filename == '':
+        return jsonify({"error": "No image selected for uploading"}), 400
     
-    result, saved_path = detect_and_crop_signature(image_path)
+    # Call detect_and_crop_signature with the image file object
+    result, base64_with_header = detect_and_crop_signature(image_file)
     
-    if saved_path:
-        return jsonify({"message": result, "output_path": saved_path}), 200
+    if base64_with_header:
+        return jsonify({"message": result, "cropped_image": base64_with_header}), 200
     else:
-        return jsonify({"error": result}), 500
+        return jsonify({"error HE HE": result}), 500
+
 
 
 if __name__ == '__main__':
