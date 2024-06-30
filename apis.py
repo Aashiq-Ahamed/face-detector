@@ -29,16 +29,10 @@ def process_image():
 @app.route('/process_sig', methods=['GET'])
 def process_sig():
     image_path = request.args.get('image_path')
-    output_directory = request.args.get('output_dir')
     if not image_path:
         return jsonify({"error": "No image path provided"}), 400
     
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-
-    output_path = os.path.join(output_directory, 'cropped_signature.jpg')
-    
-    result, saved_path = detect_and_crop_signature(image_path, output_path)
+    result, saved_path = detect_and_crop_signature(image_path)
     
     if saved_path:
         return jsonify({"message": result, "output_path": saved_path}), 200

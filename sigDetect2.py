@@ -1,7 +1,9 @@
 import cv2
 from skimage import measure
+import base64
+import numpy as np
 
-def detect_and_crop_signature(original_img_path, output_path):
+def detect_and_crop_signature(original_img_path):
     # Read the original image
     original_img = cv2.imread(original_img_path)
     
@@ -33,6 +35,12 @@ def detect_and_crop_signature(original_img_path, output_path):
         # Crop the original image
         cropped_signature = original_img[minr:maxr, minc:maxc]
 
-        # Save the cropped signature
-        cv2.imwrite(output_path, cropped_signature)
-        return f"Signature cropped and saved as {output_path}", output_path
+        # Convert cropped image to base64
+        retval, buffer = cv2.imencode('.png', cropped_signature)  # Ensure the correct format is used here
+        if not retval:
+            return "Error encoding image to base64.", None
+
+        base64_cropped_image = base64.b64encode(buffer).decode('utf-8')
+        base64_with_header = f"data:image/png;base64,{base64_cropped_image}"
+
+        return "Signature cropped and converted to base64 with header.", base64_with_header
