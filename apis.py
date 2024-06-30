@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify
 import os
 from face2 import detect_faces_and_crop
 from sigDetect2 import detect_and_crop_signature
@@ -29,10 +29,10 @@ def process_image():
 @app.route('/process_sig', methods=['GET'])
 def process_sig():
     image_path = request.args.get('image_path')
+    output_directory = request.args.get('output_dir')
     if not image_path:
         return jsonify({"error": "No image path provided"}), 400
     
-    output_directory = r'C:\Users\aashiq.a\Desktop\outputs'
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
