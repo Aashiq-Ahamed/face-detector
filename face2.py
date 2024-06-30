@@ -25,12 +25,12 @@ def detect_faces_and_crop(image_path, output_dir):
         output_path = os.path.join(output_dir, f"cropped_face_{i+1}.jpg")
         cv2.imwrite(output_path, cropped_face)
     
-    return f"Detected and cropped {len(faces)} faces. Saved in {output_dir}"
+    return output_path
 
 # Example usage
-input_image_path = r'C:\Users\aashiq.a\Desktop\inputs\face1.png'
-output_directory = r'C:\\Users\\aashiq.a\\Desktop\\outputs'
-result = detect_faces_and_crop(input_image_path, output_directory)
-outputPath = detect_faces_and_crop(input_image_path, output_directory)
-print(result)
+# input_image_path = r'C:\Users\aashiq.a\Desktop\inputs\face1.png'
+# output_directory = r'C:\\Users\\aashiq.a\\Desktop\\outputs'
+# result = detect_faces_and_crop(input_image_path, output_directory)
+# outputPath = detect_faces_and_crop(input_image_path, output_directory)
+# print(result)
 
