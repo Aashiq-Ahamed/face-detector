@@ -6,7 +6,8 @@ from flask_cors import CORS  # Import CORS from flask_cors module
 from sigDetect2 import detect_and_crop_signature
 
 app = Flask(__name__)
-CORS(app)  # Apply CORS to your Flask app
+#CORS(app)  # Apply CORS to your Flask app
+CORS(app, resources={r"/*": {"origins": "http://localhost:4600"}})
 
 
 # Cropped Face API
